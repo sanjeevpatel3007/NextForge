@@ -45,6 +45,17 @@ export const CRAZY_PROJECTS: ProjectIdea[] = [
       persistenceLayer: 'In-memory ring buffer or Redis time-series stream storing the last 100 flight transitions'
     },
     quickDemoType: 'chronostate',
+    complexityMetrics: {
+      overallScore: 94,
+      tier: 'Staff',
+      difficultyRank: 'Top 2% Next.js Architects',
+      dimensions: [
+        { name: 'RSC Flight Wire Decoding', score: 98, description: 'Deserializing raw React 19 Flight protocol chunks without breaking client stream hydration' },
+        { name: 'Optimistic State Rollback', score: 92, description: 'Transactional reconciliation with useOptimistic and useActionState on deadlock' },
+        { name: 'Distributed Cache Tags', score: 90, description: 'Edge PoP cache invalidation propagation across distributed regions' },
+        { name: 'Time-Travel State DAG', score: 96, description: 'Bidirectional state history scrubbing and action replay engine' }
+      ]
+    },
     files: [
       {
         path: 'app/actions/execute-transaction.ts',
@@ -397,6 +408,17 @@ export default function ChronoDebugger({ initialBalance }: Props) {
       persistenceLayer: 'Stateless session tokens with encrypted workspace state in cookies or KV store'
     },
     quickDemoType: 'neuromesh',
+    complexityMetrics: {
+      overallScore: 91,
+      tier: 'Staff',
+      difficultyRank: 'Top 4% Next.js AI Engineers',
+      dimensions: [
+        { name: 'Multi-Agent SSE Stream', score: 94, description: 'Multiplexing 4 concurrent LLM persona reasoning loops over single HTTP connection' },
+        { name: 'AST Syntax Mapping', score: 93, description: 'Non-blocking TypeScript AST parsing and line-by-line syntax range mapping' },
+        { name: 'Server Action Patches', score: 88, description: 'Atomic code refactoring validation and execution within Server Actions' },
+        { name: 'RSC Diff Virtualization', score: 89, description: 'Server-side syntax highlighted diff rendering without client bundle bloat' }
+      ]
+    },
     files: [
       {
         path: 'app/api/agents/analyze/route.ts',
@@ -542,6 +564,17 @@ export async function applyAgentPatch(
       persistenceLayer: 'Multi-tier cache hierarchy: L1 React memo, L2 Next.js Data Cache, L3 Fallback static snapshot'
     },
     quickDemoType: 'chaos',
+    complexityMetrics: {
+      overallScore: 98,
+      tier: 'Principal',
+      difficultyRank: 'Top 0.5% Distributed Engineers',
+      dimensions: [
+        { name: 'Circuit Breaker State Machine', score: 99, description: 'Closed/Open/Half-Open state transitions shielding downstream Postgres pool' },
+        { name: 'Thundering Herd Deduplication', score: 97, description: 'unstable_cache request deduplication under 10,000 concurrent req/s' },
+        { name: 'Fault Isolation & Zero Downtime', score: 98, description: 'Zero 500 status codes delivered during full database network partition' },
+        { name: 'Streaming Suspense Resilience', score: 96, description: 'Graceful partial hydration and skeleton degradation without unmounting DOM' }
+      ]
+    },
     files: [
       {
         path: 'lib/circuit-breaker.ts',
@@ -673,6 +706,17 @@ export async function fetchCatalogWithChaos(chaosLatencyMs = 0, forceFailure = f
       persistenceLayer: 'Browser OPFS (Origin Private File System) / IndexedDB vector store'
     },
     quickDemoType: 'sovereign',
+    complexityMetrics: {
+      overallScore: 92,
+      tier: 'Staff',
+      difficultyRank: 'Top 3% Local-First Engineers',
+      dimensions: [
+        { name: 'WASM Vector Indexing', score: 96, description: 'In-browser SIMD WebAssembly cosine similarity across 384 dimensions in <4ms' },
+        { name: 'Zero-Knowledge Privacy', score: 95, description: '100% client-side vector memory with zero raw data leakage to cloud servers' },
+        { name: 'Generative RSC Streaming', score: 90, description: 'On-demand React Server Component widget synthesis based on semantic intent' },
+        { name: 'OPFS Offline Persistence', score: 87, description: 'Origin Private File System vector caching with sub-millisecond warm starts' }
+      ]
+    },
     files: [
       {
         path: 'app/api/wasm-loader/route.ts',
@@ -736,6 +780,17 @@ export async function GET() {
       persistenceLayer: 'High-throughput in-memory book with snapshot checkpointing'
     },
     quickDemoType: 'arena',
+    complexityMetrics: {
+      overallScore: 95,
+      tier: 'Staff',
+      difficultyRank: 'Top 1% Real-Time Web Engineers',
+      dimensions: [
+        { name: 'Sub-millisecond Edge SSE', score: 97, description: 'High-frequency 50 ticks/sec broadcast without React DOM thrashing or lag' },
+        { name: 'Optimistic Order Matching', score: 95, description: 'Instant client-side depth matching and balance reservation before network ACK' },
+        { name: 'Atomic Action Serialization', score: 94, description: 'Preventing double-spend and race conditions in concurrent click streams' },
+        { name: 'Real-time Depth Rendering', score: 93, description: 'Dynamic order book ladder with synchronized market spread calculations' }
+      ]
+    },
     files: [
       {
         path: 'app/actions/place-order.ts',

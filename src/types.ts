@@ -20,6 +20,17 @@ export interface NextJsFeatureHighlight {
   description: string;
 }
 
+export interface ComplexityMetrics {
+  overallScore: number; // 0-100
+  tier: 'Senior' | 'Staff' | 'Principal' | 'Legendary';
+  difficultyRank: string; // e.g. "Top 2% Next.js Engineers"
+  dimensions: {
+    name: string;
+    score: number; // 0-100
+    description: string;
+  }[];
+}
+
 export interface ProjectIdea {
   id: string;
   title: string;
@@ -39,6 +50,7 @@ export interface ProjectIdea {
   };
   files: NextJsCodeFile[];
   quickDemoType: 'chronostate' | 'neuromesh' | 'chaos' | 'sovereign' | 'arena';
+  complexityMetrics?: ComplexityMetrics;
 }
 
 export interface ChronoStateEvent {

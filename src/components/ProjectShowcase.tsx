@@ -22,6 +22,7 @@ import SovereignAiSim from './simulations/SovereignAiSim';
 import AlgoArenaSim from './simulations/AlgoArenaSim';
 import CodeExplorer from './CodeExplorer';
 import ArchitectureBlueprint from './ArchitectureBlueprint';
+import ComplexityGauge from './ComplexityGauge';
 
 interface ShowcaseProps {
   projects: ProjectIdea[];
@@ -193,6 +194,11 @@ export default function ProjectShowcase({
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* D3 Technical Complexity Gauge */}
+          <div className="mt-6 pt-6 border-t border-slate-800">
+            <ComplexityGauge metrics={activeProject.complexityMetrics} projectTitle={activeProject.title} />
           </div>
         </div>
       </section>
