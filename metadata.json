@@ -1,0 +1,6 @@
+{
+  "name": "NextForge: Crazy Next.js Project Lab",
+  "description": "Explore crazy, portfolio-defining Next.js 15 project ideas with interactive live simulations, full architecture blueprints, production-ready code explorer, and custom idea generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
