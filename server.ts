@@ -21,85 +21,122 @@ async function startServer() {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // Gemini API route for dynamic crazy Next.js idea generation
-  app.post('/api/generate-idea', async (req, res) => {
+  // URL inspection proxy for live websites
+  app.post('/api/analyze-url', async (req, res) => {
+    try {
+      const { url } = req.body;
+      if (!url || typeof url !== 'string') {
+        return res.status(400).json({ error: 'Valid URL is required' });
+      }
+
+      let targetUrl = url.trim();
+      if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+        targetUrl = `https://${targetUrl}`;
+      }
+
+      const startTime = Date.now();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+      const response = await fetch(targetUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 SEO-Lens/1.0',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+        signal: controller.signal,
+        redirect: 'follow',
+      });
+
+      clearTimeout(timeoutId);
+      const responseTime = Date.now() - startTime;
+      const html = await response.text();
+      const finalUrl = response.url || targetUrl;
+      const status = response.status;
+
+      res.json({
+        success: true,
+        url: finalUrl,
+        status,
+        responseTimeMs: responseTime,
+        html,
+      });
+    } catch (err: any) {
+      console.error('URL Fetch Error:', err.message);
+      res.status(500).json({
+        error: `Could not fetch URL: ${err.message}. If the domain blocks automated requests, try another URL or test with one of the pre-loaded sites.`,
+      });
+    }
+  });
+
+  // Gemini SEO Issue Diagnostic API
+  app.post('/api/ai-diagnose', async (req, res) => {
     try {
       const rawKey = process.env.GEMINI_API_KEY || '';
       const apiKey = rawKey.replace(/^["']|["']$/g, '').trim();
-      const { domain, seniority, features, customPrompt } = req.body;
+      const { url, title, metaDescription, issues, headingsSummary, imagesSummary } = req.body;
 
       if (!apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey.length < 15) {
-        return res.status(200).json({
+        return res.json({
           fallback: true,
-          message: 'Using built-in neural idea synthesis engine.',
+          message: 'Gemini API key not configured. Using standard structured SEO prompt.',
         });
       }
 
       const ai = new GoogleGenAI({ apiKey });
-      const prompt = `You are a Principal Next.js Architect and Creative Tech Visionary.
-Generate an audacious, "crazy", portfolio-defining project idea designed for a senior/staff engineer to build as a mind-blowing demo in Next.js 15 (App Router, Server Actions, React Server Components, Streaming, Edge runtime, Optimistic UI).
+      const prompt = `You are an elite Senior Technical SEO Specialist and Web Architect.
+Analyze the following on-page and technical SEO audit findings for: ${url || 'Current Page'}
 
-User inputs:
-- Target Domain: ${domain || 'Developer Tooling & Systems'}
-- Seniority Level: ${seniority || 'Staff / Principal Engineer'}
-- Ingredients: ${features && features.length > 0 ? features.join(', ') : 'Server Actions, React Server Components, Streaming Suspense, Edge Middleware, Canvas/WebGL'}
-- Custom Request: ${customPrompt || 'Surprise me with a radical concept that combines Next.js 15 advanced primitives with high visual impact.'}
+Page Metadata:
+- Title: "${title || 'N/A'}"
+- Meta Description: "${metaDescription || 'N/A'}"
+- Heading Overview: ${headingsSummary || 'N/A'}
+- Image Audit: ${imagesSummary || 'N/A'}
 
-Return strictly valid JSON matching this schema:
+Detected Issues:
+${JSON.stringify(issues, null, 2)}
+
+Provide a senior-level, crystal-clear remediation action plan in valid JSON format matching this schema:
 {
-  "id": "a-unique-slug",
-  "title": "Short Punchy Title",
-  "tagline": "Electrifying 1-sentence hook",
-  "domain": "Domain category",
-  "badge": "STAFF-GRADE DEMO",
-  "whyCrazy": "2-3 sentences explaining why this concept breaks conventions and makes interviewers/investors gasp",
-  "viralFactor": "Why this goes viral on GitHub / Twitter / Hacker News",
-  "corePillars": ["Pillar 1 with technical depth", "Pillar 2 with technical depth", "Pillar 3 with technical depth"],
-  "nextjs15Features": [
-    { "feature": "Server Actions & useActionState", "role": "How it powers the crazy mechanic" },
-    { "feature": "React Server Component Streaming", "role": "How it solves latency or streaming UI" },
-    { "feature": "Optimistic UI with useOptimistic", "role": "Instant feedback loop description" },
-    { "feature": "Edge Middleware / Route Handlers", "role": "Low-latency pipeline" }
+  "summary": "2 sentence executive verdict on current on-page SEO health",
+  "criticalFixes": [
+    {
+      "priority": "P0" | "P1" | "P2",
+      "issue": "Brief issue title",
+      "whyItMatters": "Impact on Google ranking/crawling",
+      "recommendedCode": "Exact HTML/Schema snippet to copy-paste"
+    }
   ],
-  "architectureTree": [
-    "app/layout.tsx",
-    "app/page.tsx",
-    "app/actions/engine.ts",
-    "app/api/stream/route.ts",
-    "components/visualizer.tsx",
-    "lib/types.ts"
-  ],
-  "keySnippet": {
-    "filename": "app/actions/engine.ts",
-    "description": "Production Next.js 15 Server Action snippet demonstrating core logic",
-    "code": "// Next.js 15 Server Action\\n'use server';\\n..."
+  "titleAndMetaRewrite": {
+    "recommendedTitle": "Optimized title under 60 chars",
+    "recommendedDescription": "Compelling meta description between 140-155 chars with call to action",
+    "rationale": "Why this will increase SERP CTR"
+  },
+  "schemaRecommendation": {
+    "type": "Organization | Article | Product | WebSite | LocalBusiness",
+    "jsonLdSnippet": "<!-- Fully formed <script type=\\"application/ld+json\\"> tag ready to paste -->"
   }
 }`;
 
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Gemini API timeout')), 6500)
-      );
-
-      const generatePromise = ai.models.generateContent({
+      const response: any = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
         contents: prompt,
         config: {
           responseMimeType: 'application/json',
-          temperature: 0.8,
+          temperature: 0.3,
         },
       });
 
-      const response: any = await Promise.race([generatePromise, timeoutPromise]);
       const text = response?.text;
       if (!text) {
-        return res.status(200).json({ fallback: true });
+        return res.json({ fallback: true });
       }
 
       const parsed = JSON.parse(text);
-      return res.json({ success: true, idea: parsed });
+      return res.json({ success: true, diagnosis: parsed });
     } catch (err: any) {
-      console.error('Gemini error:', err);
-      return res.status(200).json({ fallback: true, error: err.message });
+      console.error('AI Diagnose Error:', err);
+      return res.json({ fallback: true, error: err.message });
     }
   });
 

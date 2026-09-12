@@ -1,6 +1,6 @@
 {
-  "name": "NextForge: Crazy Next.js Project Lab",
-  "description": "Explore crazy, portfolio-defining Next.js 15 project ideas with interactive live simulations, full architecture blueprints, production-ready code explorer, and custom idea generation.",
+  "name": "SEO Lens: On-Page & Technical Chrome Extension",
+  "description": "Light premium Chrome extension and live analyzer for on-page SEO, technical audits, meta data, alt tags, content extraction, and AI issue remediation.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
