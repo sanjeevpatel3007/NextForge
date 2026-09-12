@@ -48,6 +48,7 @@ export interface ProjectIdea {
     edgeStreamingLayer: string;
     persistenceLayer: string;
   };
+  mermaidDiagram?: string;
   files: NextJsCodeFile[];
   quickDemoType: 'chronostate' | 'neuromesh' | 'chaos' | 'sovereign' | 'arena';
   complexityMetrics?: ComplexityMetrics;

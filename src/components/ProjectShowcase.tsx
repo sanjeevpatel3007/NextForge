@@ -170,13 +170,23 @@ export default function ProjectShowcase({
               </p>
             </div>
 
-            <button
-              onClick={onDownloadZip}
-              className="px-4 py-2 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 rounded-xl text-xs font-mono flex items-center gap-2 transition active:scale-95 shrink-0"
-            >
-              <Download className="w-4 h-4 text-indigo-400" />
-              Download {activeProject.title} Repo (.ZIP)
-            </button>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                onClick={() => setActiveTab('blueprint')}
+                className="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700/80 text-indigo-300 border border-indigo-500/30 rounded-xl text-xs font-mono flex items-center gap-2 transition active:scale-95"
+              >
+                <Workflow className="w-4 h-4 text-indigo-400" />
+                View Architecture Blueprint
+              </button>
+
+              <button
+                onClick={onDownloadZip}
+                className="px-4 py-2 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 rounded-xl text-xs font-mono flex items-center gap-2 transition active:scale-95"
+              >
+                <Download className="w-4 h-4 text-indigo-400" />
+                Download Repo (.ZIP)
+              </button>
+            </div>
           </div>
 
           {/* Feature Highlights Grid */}
@@ -240,7 +250,7 @@ export default function ProjectShowcase({
             }`}
           >
             <Workflow className="w-3.5 h-3.5" />
-            3. Architectural Blueprint
+            3. Architecture Blueprint (Mermaid & Flow)
           </button>
 
           <button

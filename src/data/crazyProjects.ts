@@ -44,6 +44,36 @@ export const CRAZY_PROJECTS: ProjectIdea[] = [
       edgeStreamingLayer: 'Edge Route Handler (/api/telemetry/stream) broadcasting live action events via Server-Sent Events',
       persistenceLayer: 'In-memory ring buffer or Redis time-series stream storing the last 100 flight transitions'
     },
+    mermaidDiagram: `flowchart TD
+  subgraph Client["Next.js 15 Client Layer ('use client')"]
+    Scrubber["Timeline DAG Scrubber<br/>(Scrub Historical States)"]
+    OptState["useOptimistic()<br/>(Zero-Latency Ledger Balance)"]
+    Inspector["Flight Wire Chunk Inspector<br/>(React 19 Deserializer)"]
+  end
+
+  subgraph ServerActions["Server Action Boundary ('use server')"]
+    Action["executeTransaction()<br/>with Nanosecond Span Tracing"]
+    Deadlock["Chaos Deadlock Injector<br/>(Simulated 500 Failure)"]
+  end
+
+  subgraph EdgeStream["Edge Telemetry & Streaming"]
+    TelemetrySSE["/api/telemetry/stream<br/>(Server-Sent Events)"]
+    TagReval["revalidateTag('account-ledger')<br/>(Edge PoP Invalidation)"]
+  end
+
+  subgraph Persistence["Storage & State Buffer"]
+    RingBuffer[("In-Memory Ring Buffer<br/>(100 Flight Transitions)")]
+    LedgerDB[("PostgreSQL ACID Ledger<br/>(Row-Level Locks)")]
+  end
+
+  Scrubber -->|1. Dispatch Action via Form| Action
+  Action -->|2. Inject Artificial Jitter/Chaos| Deadlock
+  Deadlock -->|3. Commit Row Lock| LedgerDB
+  Action -->|4. Push Mutation Telemetry| RingBuffer
+  RingBuffer -->|5. Stream Live SSE Chunks| TelemetrySSE
+  TelemetrySSE -->|6. Deserialize Raw Flight Wire| Inspector
+  Action -.->|7. On-Demand Invalidation| TagReval
+  Action -.->|On Deadlock: Rollback| OptState`,
     quickDemoType: 'chronostate',
     complexityMetrics: {
       overallScore: 94,
@@ -407,6 +437,39 @@ export default function ChronoDebugger({ initialBalance }: Props) {
       edgeStreamingLayer: 'Edge Route Handler multiplexing parallel agent reasoning loops with chunked SSE',
       persistenceLayer: 'Stateless session tokens with encrypted workspace state in cookies or KV store'
     },
+    mermaidDiagram: `flowchart TD
+  subgraph Client["Next.js 15 Client Layer ('use client')"]
+    Monaco["Monaco Virtual Editor<br/>(AST Highlight Overlays)"]
+    AgentPills["Inline Agent Avatars<br/>(Consensus Scores)"]
+    DiffView["RSC Diff Virtualizer<br/>(Side-by-Side Review)"]
+  end
+
+  subgraph EdgeRouter["Next.js 15 Edge Route ('edge')"]
+    SSE["/api/agents/analyze<br/>(Multiplexed SSE Stream)"]
+    Broadcaster["ReadableStream Controller<br/>(Backpressure Aware)"]
+  end
+
+  subgraph AgentMesh["Autonomous Multi-Agent Cluster"]
+    Lead["ArchLead Persona<br/>(Design Patterns)"]
+    RedSec["RedSec Persona<br/>(OWASP Security)"]
+    Perf["PerfHawk Persona<br/>(Edge/RSC Limits)"]
+    SRE["ChaosSRE Persona<br/>(Resilience/Retries)"]
+  end
+
+  subgraph ServerActions["Server Action Boundary ('use server')"]
+    ApplyPatch["applyDiffAction()<br/>(Atomic AST Refactor)"]
+    ASTCompiler["TypeScript Compiler API<br/>(Zero Client Bundle Cost)"]
+  end
+
+  Monaco -->|1. Debounced Source Code| SSE
+  SSE --> Broadcaster
+  Broadcaster -->|Parallel Reasoning| Lead & RedSec & Perf & SRE
+  Lead & RedSec & Perf & SRE -->|Stream Chunked Reviews| Broadcaster
+  Broadcaster -->|Live Chunk Stream| AgentPills
+  AgentPills -->|Display In-line Warning| DiffView
+  DiffView -->|2. Accept Refactor Proposal| ApplyPatch
+  ApplyPatch --> ASTCompiler
+  ASTCompiler -->|Apply AST Transform| Monaco`,
     quickDemoType: 'neuromesh',
     complexityMetrics: {
       overallScore: 91,
@@ -563,6 +626,36 @@ export async function applyAgentPatch(
       edgeStreamingLayer: 'Distributed edge simulation nodes reporting health metrics via WebSocket or SSE',
       persistenceLayer: 'Multi-tier cache hierarchy: L1 React memo, L2 Next.js Data Cache, L3 Fallback static snapshot'
     },
+    mermaidDiagram: `flowchart TD
+  subgraph Ingress["Edge Ingress Layer"]
+    EdgeIAD["Edge PoP (iad1)<br/>Washington DC"]
+    EdgeFRA["Edge PoP (fra1)<br/>Frankfurt"]
+    Middleware["Next.js 15 Middleware<br/>(Circuit Health Routing)"]
+  end
+
+  subgraph NextServer["Next.js 15 App Router ('use server')"]
+    Layout["Layout Suspense Boundary<br/>(Graceful Skeleton Fallback)"]
+    Breaker["Circuit Breaker Engine<br/>(CLOSED / OPEN / HALF-OPEN)"]
+    Deduplicator["unstable_cache()<br/>(Thundering Herd Guard)"]
+  end
+
+  subgraph ChaosEngine["Distributed Chaos Injector"]
+    FaultMatrix["Fault Matrix Controller<br/>(Partition / Jitter / Pool Exhaustion)"]
+  end
+
+  subgraph Persistence["Storage & Fallback Snapshot"]
+    PgPrimary[("Primary PostgreSQL<br/>(Pool: 20 conns)")]
+    StaticSnapshot[("Stale Snapshot Cache<br/>(Zero 500 Guarantee)")]
+  end
+
+  EdgeIAD & EdgeFRA --> Middleware
+  Middleware --> Layout
+  Layout --> Breaker
+  Breaker --> Deduplicator
+  FaultMatrix -.->|Simulate Severed DB Link| PgPrimary
+  Deduplicator -->|Circuit CLOSED: Healthy Fetch| PgPrimary
+  Breaker -.->|Circuit OPEN: Trip to Fallback| StaticSnapshot
+  StaticSnapshot -.->|Return Stale SWR Data| Layout`,
     quickDemoType: 'chaos',
     complexityMetrics: {
       overallScore: 98,
@@ -705,6 +798,28 @@ export async function fetchCatalogWithChaos(chaosLatencyMs = 0, forceFailure = f
       edgeStreamingLayer: 'Edge routes serving cached model weights with Brotli compression',
       persistenceLayer: 'Browser OPFS (Origin Private File System) / IndexedDB vector store'
     },
+    mermaidDiagram: `flowchart TD
+  subgraph Client["Next.js 15 Client Layer ('use client')"]
+    Canvas2D["2D Semantic Scatterplot<br/>(WebGL / Canvas Realtime)"]
+    WasmWorker["WebWorker WASM Thread<br/>(Transformers.js MiniLM SIMD)"]
+    OPFS[("Browser OPFS / IndexedDB<br/>(Encrypted Local Vector Store)")]
+  end
+
+  subgraph EdgeProxy["Next.js 15 Edge Runtime ('edge')"]
+    WasmRoute["/api/wasm-loader<br/>(Brotli Quantized Model Weights)"]
+    GenUIRoute["/api/generative-ui<br/>(RSC Widget Synthesizer)"]
+  end
+
+  subgraph ServerComponent["React Server Components"]
+    RSCWidget["Streamed React Server Widget<br/>(Zero Client Bundle Cost)"]
+  end
+
+  WasmRoute -->|1. Stream Cached Quantized Weights| WasmWorker
+  Canvas2D -->|2. Local Similarity Query| WasmWorker
+  WasmWorker <-->|3. Sub-4ms Cosine Similarity| OPFS
+  Canvas2D -->|4. High-Relevance Intent Match| GenUIRoute
+  GenUIRoute -->|5. Synthesize Server Widget| RSCWidget
+  RSCWidget -->|6. Stream Flight UI Chunks| Canvas2D`,
     quickDemoType: 'sovereign',
     complexityMetrics: {
       overallScore: 92,
@@ -779,6 +894,30 @@ export async function GET() {
       edgeStreamingLayer: 'Edge SSE stream with 20ms tick rate',
       persistenceLayer: 'High-throughput in-memory book with snapshot checkpointing'
     },
+    mermaidDiagram: `flowchart TD
+  subgraph Client["Next.js 15 Client Layer ('use client')"]
+    DepthChart["Canvas Depth Visualizer<br/>(Real-Time Order Wall)"]
+    OrderLadder["Order Book Ladder<br/>(50 ticks/sec SSE)"]
+    OptimisticUI["useOptimistic()<br/>(Instant Order Slip Queue)"]
+  end
+
+  subgraph EdgeStream["Next.js 15 Edge Route ('edge')"]
+    MarketSSE["/api/market/depth<br/>(High-Frequency SSE Engine)"]
+    MarketMakerBots["Autonomous Trading Bots<br/>(Poisson Order Distribution)"]
+  end
+
+  subgraph ServerActions["Server Action Boundary ('use server')"]
+    PlaceOrder["placeOrderAction()<br/>(Atomic Non-Blocking)"]
+    MatchingEngine["In-Memory Matching Engine<br/>(Price-Time Priority)"]
+  end
+
+  MarketMakerBots --> MarketSSE
+  MarketSSE -->|Stream Level-2 Depth| OrderLadder
+  OrderLadder --> DepthChart
+  OrderLadder -->|1. Submit Limit/Market Order| OptimisticUI
+  OptimisticUI -->|2. Non-blocking Post| PlaceOrder
+  PlaceOrder --> MatchingEngine
+  MatchingEngine -->|3. Executed Fill / Settle| MarketSSE`,
     quickDemoType: 'arena',
     complexityMetrics: {
       overallScore: 95,
